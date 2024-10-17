@@ -27,40 +27,31 @@ int main()
     try {
         morph::vec<float, 3> offset = { 0.0, 0.0, 0.0 };
 
-        std::vector<morph::vec<float, 3>> coords(20*20);
-        std::vector<morph::vec<float, 3>> quivs(20*20);
+        std::vector<morph::vec<float, 3>> coords(20*20*20);
+        std::vector<morph::vec<float, 3>> quivs(20*20*20);
 
+        size_t a = 0;
         size_t k = 0;
         for (int i = -10; i < 10; ++i) {
             for (int j = -10; j < 10; ++j) {
-                float x = 0.1*i;
-                float y = 0.1*j;
-                float z = 0.1;
-                coords[k] = {x, y, z};
-                k++;
+                for (int l = -10; l < 10; ++l) {
+                    float x = 0.1*i;
+                    float y = 0.1*j;
+                    float z = 0.1*l;
+                    coords[a] = {x, y, z};
+                    a++;
+                    quivs[k] = {x, y, z};
+                    k++;
+                }
             }
         }
 
-        k = 0;
-        for (int i = -10; i < 10; ++i) {
-            for (int j = -10; j < 10; ++j) {
-                if (i > -10 && i < 10 && j > -10 && j < 10) {
-                    morph::vec<float> r = coords[k] - coords[k-20];
-                    morph::vec<float> g = coords[k] - coords[k-1];
-                    // Compute normal and modulate by the 'z' value
-                    quivs[k] = r.cross(g)*30.0f*coords[k][2];
-                } else {
-                    quivs[k] = {0.0f, 0.0f, 0.0f};
-                }
-                k++;
-            }
-        }
         auto vmp = std::make_unique<morph::QuiverVisual<float>>(&coords, offset, &quivs, morph::ColourMapType::MonochromeGreen);
         v.bindmodel (vmp);
         vmp->quiver_length_gain = 0.4f; // Scale the length of the quivers on screen
         vmp->quiver_thickness_gain = 0.05f; // Scale thickness of the quivers
         // vmp->fixed_quiver_thickness = 0.003f; // Also possible to request a fixed thickness
-        vmp->shapesides = 24; // Default is 12, this makes the graphics look nicer - it
+        vmp->shapesides = 12; // Default is 12, this makes the graphics look nicer - it
                               // controls how many triangles go into each cone, rod and
                               // sphere in the quivers.
         vmp->finalize();
