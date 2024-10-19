@@ -27,20 +27,26 @@ int main()
     try {
         morph::vec<float, 3> offset = { 0.0, 0.0, 0.0 };
 
-        std::vector<morph::vec<float, 3>> coords(20*20*20);
-        std::vector<morph::vec<float, 3>> quivs(20*20*20);
+        int size = 6;
+        int halfsize;
+        halfsize = size / 2;
+
+        std::vector<morph::vec<float, 3>> coords(size*size*size);
+        std::vector<morph::vec<float, 3>> quivs(size*size*size);
 
         size_t a = 0;
         size_t k = 0;
-        for (int i = -10; i < 10; ++i) {
-            for (int j = -10; j < 10; ++j) {
-                for (int l = -10; l < 10; ++l) {
+        for (int i = -halfsize; i < halfsize; ++i) {
+            for (int j = -halfsize; j < halfsize; ++j) {
+                for (int l = -halfsize; l < halfsize; ++l) {
                     float x = 0.1*i;
                     float y = 0.1*j;
                     float z = 0.1*l;
+                    //map coords
                     coords[a] = {x, y, z};
                     a++;
-                    quivs[k] = {x, y, z};
+                    //set quivs to be unit vectors of coord.
+                    quivs[k] = {x/std::abs(x+0.01), y/std::abs(y+0.01), z/std::abs(z+0.01)};
                     k++;
                 }
             }
