@@ -42,19 +42,22 @@ int main()
                     float x = 0.1*i;
                     float y = 0.1*j;
                     float z = 0.1*l;
+                    float L;
                     //map coords
                     coords[a] = {x, y, z};
+
+                    L = std::sqrt((x*x)+(y*y)+(z*z));
+                    if(L !=0){quivs[k] = {x/L,y/L,z/L};}else{quivs[k]={0.0f,0.0f,0.0f};};
                     a++;
-                    //set quivs to be unit vectors of coord.
-                    quivs[k] = {x/std::abs(x+0.01), y/std::abs(y+0.01), z/std::abs(z+0.01)};
                     k++;
+
                 }
             }
         }
 
-        auto vmp = std::make_unique<morph::QuiverVisual<float>>(&coords, offset, &quivs, morph::ColourMapType::MonochromeGreen);
+        auto vmp = std::make_unique<morph::QuiverVisual<float>>(&coords, offset, &quivs, morph::ColourMapType::Viridis);
         v.bindmodel (vmp);
-        vmp->quiver_length_gain = 0.4f; // Scale the length of the quivers on screen
+        vmp->quiver_length_gain = 0.1f; // Scale the length of the quivers on screen
         vmp->quiver_thickness_gain = 0.05f; // Scale thickness of the quivers
         // vmp->fixed_quiver_thickness = 0.003f; // Also possible to request a fixed thickness
         vmp->shapesides = 12; // Default is 12, this makes the graphics look nicer - it
@@ -63,7 +66,18 @@ int main()
         vmp->finalize();
         v.addVisualModel (vmp);
 
+        auto qplot2 = std::make_unique<morph::QuiverVisual<float>>(&coords2, offset, &quivs2, morph::ColourMapType::Viridis);
+        v.bindmodel (qplot2);
+        qplot2->quiver_length_gain = 0.5f; // Scale the length of the quivers on screen
+        qplot2->quiver_thickness_gain = 0.05f; // Scale thickness of the quivers
+        // qplot2->fixed_quiver_thickness = 0.003f; // Also possible to request a fixed thickness
+        qplot2->shapesides = 12; // Default is 12, this makes the graphics look nicer - it
+                              // controls how many triangles go into each cone, rod and
+                              // sphere in the quivers.
+        qplot2->finalize();
+        v.addVisualModel(qplot2);
         v.keepOpen();
+
 
     } catch (const std::exception& e) {
         std::cerr << "Caught exception: " << e.what() << std::endl;
