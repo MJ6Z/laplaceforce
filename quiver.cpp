@@ -1,6 +1,7 @@
 /*
- * Visualize an example quiver field
+ * Visualize a magnetic field around a wire. 
  */
+
 #include <morph/Visual.h>
 #include <morph/ColourMap.h>
 #include <morph/QuiverVisual.h>
@@ -23,9 +24,6 @@ int main()
     // For a white background:
     v.backgroundBlack();
     v.lightingEffects();
-
-    try {
-        morph::vec<float, 3> offset = { 0.0, 0.0, 0.0 };
 
         int size = 12;
         int halfsize;
@@ -51,7 +49,7 @@ int main()
 
                     quivs[k] = {1,0,0};
 
-                    if(x!=0){quivs2[k]={0,z*x/std::abs(x),-1*y*x/std::abs(x)};}else{quivs2[k]={0,1*z*x,-1*y*x};}
+                    if(x!=0){quivs2[k]={0,z*x/std::abs(x), -1*y*x/std::abs(x)};}else{ quivs2[k]= {0,1*z*x,-1*y*x}; }
                     a++;
                     k++;
 
@@ -81,12 +79,6 @@ int main()
         qplot2->finalize();
         v.addVisualModel(qplot2);
         v.keepOpen();
-
-
-    } catch (const std::exception& e) {
-        std::cerr << "Caught exception: " << e.what() << std::endl;
-        rtn = -1;
-    }
 
     return rtn;
 }
