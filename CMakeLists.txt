@@ -61,7 +61,7 @@ include_directories(BEFORE ${MORPH_INCLUDE_PATH})         # Allows morph/Header.
 #
 # All the library finding is now done. It's time to compile the program.
 #
-add_executable(model quiver.cpp)
+add_executable(model em.cpp)
 
 set(MORPH_LIBS_CORE ${ARMADILLO_LIBRARY} ${ARMADILLO_LIBRARIES} ${HDF5_C_LIBRARIES})
 set(MORPH_LIBS_GL OpenGL::GL Freetype::Freetype glfw)
