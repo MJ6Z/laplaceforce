@@ -1,4 +1,4 @@
-# EM vectors project
+# QuiverVisual Lorentz force special case project.
 Wanted to mess about with morph::quivervisuals with some visualisation of the Lorentz force acting on a wire.
 [morphologica](https://github.com/ABRG-Models/morphologica) must be installed in-tree with the code.
 
