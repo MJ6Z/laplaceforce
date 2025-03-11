@@ -15,7 +15,7 @@ int main()
 {
 
     //Visual model setup
-    morph::Visual v(1024, 768, "morph::QuiverVisual", {0.8,-0.8}, {.05,.05,.05}, 2.0f, 0.01f);
+    morph::Visual v(1024, 768, "morph::QuiverVisual");
     morph::vec<float, 3> offset = { 0.0, 0.0, 0.0 };
     v.zNear = 0.001;
     v.showCoordArrows = true;
