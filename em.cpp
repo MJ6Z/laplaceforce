@@ -2,10 +2,12 @@
  * Visualize a magnetic field around a wire.
  */
 
-#include <morph/Visual.h>
-#include <morph/ColourMap.h>
-#include <morph/QuiverVisual.h>
-#include <morph/vec.h>
+/*mplot & sm*/
+
+#include <mplot/Visual.h>
+#include <mplot/ColourMap.h>
+#include <mplot/QuiverVisual.h>
+#include <sm/vvec>
 #include <iostream>
 #include <array>
 #include <stdexcept>
@@ -15,11 +17,11 @@ int main()
 {
 
     //Visual model setup
-    morph::Visual v(1024, 768, "morph::QuiverVisual");
-    morph::vec<float, 3> offset = { 0.0, 0.0, 0.0 };
+    mplot::Visual v(1024, 768, "mplot::QuiverVisual");
+    sm::vec<float, 3> offset = { 0.0, 0.0, 0.0 };
     v.zNear = 0.001;
-    v.showCoordArrows = true;
-    v.showTitle = true;
+    v.showCoordArrows(true);
+    v.showTitle(true);
     v.backgroundBlack();
     v.lightingEffects();
 
@@ -30,11 +32,11 @@ int main()
 
 
     //Definitions, see below for uses.
-    std::vector<morph::vec<float, 3>> xline(size*size*size);
-    std::vector<morph::vec<float, 3>> xz(size*size*size);
-    std::vector<morph::vec<float, 3>> I(size*size*size);
-    std::vector<morph::vec<float, 3>> B(size*size*size);
-    std::vector<morph::vec<float, 3>> F(size*size*size);
+    std::vector<sm::vec<float, 3>> xline(size*size*size);
+    std::vector<sm::vec<float, 3>> xz(size*size*size);
+    std::vector<sm::vec<float, 3>> I(size*size*size);
+    std::vector<sm::vec<float, 3>> B(size*size*size);
+    std::vector<sm::vec<float, 3>> F(size*size*size);
 
 
     //iterator.
@@ -44,7 +46,7 @@ int main()
         for (int j = -halfsize; j < halfsize; ++j) {
             for (int k = -halfsize; k < halfsize; ++k) {
                 float x = 0.1*i;
-                float y = 0.1*j;
+                //float y = 0.1*j;
                 float z = 0.1*k;
 
                 //coords
@@ -53,7 +55,7 @@ int main()
 
                 //fields
                 I[a]={1,0,0}; //The current I on {x,0,0}.
-                B[a]={0,1,0}; //uniform B field on {x,0,z}.
+                B[a]={0,x,0}; //uniform B field on {x,0,z}.
                 F[a]=I[a].cross(B[a]); //The Laplace force (special case of the Lorentz force)
 
                 a++;
@@ -68,7 +70,7 @@ int main()
         vmp3 is the force visualization.
     */
 
-    auto vmp = std::make_unique<morph::QuiverVisual<float>>(&xz, offset, &B, morph::ColourMapType::MonochromeRed);
+    auto vmp = std::make_unique<mplot::QuiverVisual<float>>(&xz, offset, &B, mplot::ColourMapType::MonochromeRed);
     v.bindmodel (vmp);
     vmp->quiver_length_gain = 0.5f;
     vmp->quiver_thickness_gain = 0.02f;
@@ -77,7 +79,7 @@ int main()
     vmp->finalize();
     v.addVisualModel (vmp);
 
-    auto vmp2 = std::make_unique<morph::QuiverVisual<float>>(&xline, offset, &I, morph::ColourMapType::MonochromeBlue);
+    auto vmp2 = std::make_unique<mplot::QuiverVisual<float>>(&xline, offset, &I, mplot::ColourMapType::MonochromeBlue);
     v.bindmodel (vmp2);
     vmp2->quiver_length_gain = 0.5f;
     vmp2->quiver_thickness_gain = 0.02f;
@@ -86,7 +88,7 @@ int main()
     vmp2->finalize();
     v.addVisualModel (vmp2);
 
-    auto vmp3 = std::make_unique<morph::QuiverVisual<float>>(&xline, offset, &F, morph::ColourMapType::MonochromeGreen);
+    auto vmp3 = std::make_unique<mplot::QuiverVisual<float>>(&xline, offset, &F, mplot::ColourMapType::MonochromeGreen);
     v.bindmodel (vmp3);
     vmp3->quiver_length_gain = 0.5f;
     vmp3->quiver_thickness_gain = 0.05f;
